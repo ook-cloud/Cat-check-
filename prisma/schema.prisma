@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Label {
+  CAT
+  NOT_CAT
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  name      String
+  path      String   @unique
+  url       String
+  label     Label?
+  // Test photos are held back when training starts, so the model never sees them.
+  isTest    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TrainedModel {
+  id         String   @id @default(uuid())
+  folder     String
+  url        String
+  // How often the model was right in each training round, from 0 to 1.
+  accuracies Float[]
+  createdAt  DateTime
+}
