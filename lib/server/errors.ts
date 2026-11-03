@@ -6,6 +6,11 @@ export function requireEnv(name: string): string {
   if (!value) {
     throw new SetupError(`${name} is not set. Follow the setup steps in README.md.`);
   }
+  if (/your-project|your-region|your-secret|\[YOUR-PASSWORD\]/.test(value)) {
+    throw new SetupError(
+      `${name} in .env still has the example value. Replace it with your real Supabase value.`,
+    );
+  }
   return value;
 }
 

@@ -13,7 +13,7 @@ export async function uploadFile(path: string, file: Blob, contentType: string):
   const { error } = await files.upload(path, file, { contentType });
   if (error) {
     throw new SetupError(
-      `Supabase Storage refused the upload: ${error.message}. Check the bucket and keys in README.md.`,
+      `The upload to Supabase Storage failed (${error.message}). Check SUPABASE_URL, the key and the bucket in .env.`,
     );
   }
   return files.getPublicUrl(path).data.publicUrl;
