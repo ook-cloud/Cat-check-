@@ -19,11 +19,16 @@ export async function POST() {
 
     const testIds = chooseTestIds(labeled);
     await prisma.$transaction([
-      prisma.photo.updateMany({ where: { id: { notIn: testIds } }, data: { isTest: false } }),
-      prisma.photo.updateMany({ where: { id: { in: testIds } }, data: { isTest: true } }),
+      prisma.photo.updateMany({ where: { id: { notIn: testIds } }, data: { ground: "training" } }),
+      prisma.photo.updateMany({ where: { id: { in: testIds } }, data: { ground: "testing" } }),
     ]);
 
-    return Response.json(photos.map((photo) => ({ ...photo, isTest: testIds.includes(photo.id) })));
+    return Response.json(
+      photos.map((photo) => {
+        const isTest = testIds.includes(photo.id);
+        return { ...photo, ground: isTest ? "testing" : "training", isTest };
+      }),
+    );
   } catch (error) {
     return serverError(error);
   }

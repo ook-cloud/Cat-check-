@@ -1,6 +1,11 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
 generator client {
   provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -12,16 +17,20 @@ enum Label {
   NOT_CAT
 }
 
+enum Ground {
+  training
+  testing
+}
+
 model Photo {
-  id        String   @id @default(uuid())
-  name      String
-  path      String   @unique
-  url       String
-  label     Label?
-  // Test photos are held back when training starts, so the model never sees them.
-  isTest    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  storagePath String   @unique // where the file will live in the Storage bucket /photos/test/ait.jpg
+  label       Label?   // empty until the student labels it null || undefined
+  ground      Ground   @default(training)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt // /api/model uses this to see if labels changed after training
+
+  @@map("photos")
 }
 
 model TrainedModel {
