@@ -2,6 +2,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { requireEnv } from "./errors";
 
+// One shared Prisma client for every API route. Next.js reloads files often in dev;
+// keeping the client on globalThis stops it from opening a new database connection on every reload.
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export function getPrisma(): PrismaClient {

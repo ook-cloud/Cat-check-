@@ -19,6 +19,10 @@ export async function uploadFile(path: string, file: Blob, contentType: string):
   return files.getPublicUrl(path).data.publicUrl;
 }
 
+export function publicUrl(path: string): string {
+  return bucket().getPublicUrl(path).data.publicUrl;
+}
+
 export async function removeFiles(paths: string[]): Promise<void> {
   const { error } = await bucket().remove(paths);
   if (error) throw error;

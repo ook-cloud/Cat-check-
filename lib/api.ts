@@ -24,6 +24,6 @@ export const setLabel = (id: string, label: Label) =>
     body: JSON.stringify({ label }),
   });
 
-export const splitPhotos = () => request<Photo[]>("/api/photos/split", { method: "POST" });
+export const splitPhotos = () => request<Photo[]>("/api/training", { method: "POST" });
 
 export const getSavedModel = () => request<SavedModel | null>("/api/model");

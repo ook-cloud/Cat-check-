@@ -12,10 +12,10 @@ Built with Next.js, Supabase Storage, Prisma and TensorFlow.js.
    ```bash
    cp .env.example .env
    ```
-4. **Create the database tables:**
+4. **Create the database tables** (runs the Prisma migrations against your Supabase database):
    ```bash
    npm install
-   npm run db:push
+   npm run db:migrate
    ```
 5. **Start the app** and open <http://localhost:3000>:
    ```bash
@@ -25,7 +25,7 @@ Built with Next.js, Supabase Storage, Prisma and TensorFlow.js.
 ## How the model works
 
 - **It learns on top of a pretrained base.** Starting from nothing would need thousands of photos. So training downloads MobileNet, a small network that already recognizes shapes and textures, and trains only 2 new layers on your photos. Your browser needs internet access for this.
-- **Test photos stay out of training.** When training starts, about 20% of each label is held back. At least 1 photo of each label always stays in training, so you need 3 or more photos of a label for one to be held back.
+- **Test photos stay out of training.** When training starts, `POST /api/training` moves about 20% of each label to the testing ground. At least 1 photo of each label always stays in training, so you need 3 or more photos of a label for one to be held back.
 - **Changes make the model out of date.** Adding a photo or changing a label means you have to train again before testing.
 
 ## Where the code is
@@ -34,9 +34,10 @@ Built with Next.js, Supabase Storage, Prisma and TensorFlow.js.
 | --- | --- |
 | `app/_components` | The 16 small components from the build guide (C1 to C16) |
 | `app/_features` | The screens and what the user can do on them (F1 to F5) |
-| `app/api` | Server routes for photos and the saved model |
+| `app/api` | Server routes: `photos`, `photos/[id]`, `training` and `model` (see [docs/lesson-4d.md](docs/lesson-4d.md)) |
 | `lib` | Model training, API calls and server helpers |
-| `prisma` | The database tables |
+| `prisma` | The database tables and migrations |
+| `docs` | Lesson notes |
 
 ## Before you put it online
 

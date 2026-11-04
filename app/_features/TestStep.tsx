@@ -44,7 +44,7 @@ export const TestStep = ({ photos, model }: TestStepProps) => {
         setIsReady(true);
 
         const finished: TestResult[] = [];
-        for (const photo of photos.filter((candidate) => candidate.isTest)) {
+        for (const photo of photos.filter((candidate) => candidate.ground === "testing")) {
           const guess = await guessPhoto(fromStorage, photo.url);
           if (cancelled) return;
           finished.push({ photo, guess });

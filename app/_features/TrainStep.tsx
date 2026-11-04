@@ -38,7 +38,7 @@ export const TrainStep = ({ model, isTraining, onTrainingChange, onPhotosChange,
       onPhotosChange(photos);
 
       const trained = await trainModel(
-        photos.filter((photo) => !photo.isTest),
+        photos.filter((photo) => photo.ground === "training"),
         (accuracy) => {
           finished.push(accuracy);
           setLiveAccuracies([...finished]);

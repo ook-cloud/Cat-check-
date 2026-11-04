@@ -1,11 +1,14 @@
 export type Label = "CAT" | "NOT_CAT";
 
+/** Training photos teach the model; testing photos are held back to check it. */
+export type Ground = "training" | "testing";
+
 export type Photo = {
   id: string;
   name: string;
   url: string;
   label: Label | null;
-  isTest: boolean;
+  ground: Ground;
 };
 
 export type SavedModel = {
