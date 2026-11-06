@@ -4,7 +4,6 @@ import { badRequest, serverError } from "@/lib/server/errors";
 import { toPhoto } from "@/lib/server/photos";
 import { getPrisma } from "@/lib/server/prisma";
 
-/** GET /api/training — the labeled photos on the training ground (test photos are left out). */
 export async function GET() {
   await connection();
   try {
@@ -18,10 +17,6 @@ export async function GET() {
   }
 }
 
-/**
- * POST /api/training — runs when training starts. Holds back about 20% of each
- * label on the testing ground, so the model never sees them while it learns.
- */
 export async function POST() {
   try {
     const prisma = getPrisma();
@@ -52,7 +47,6 @@ export async function POST() {
   }
 }
 
-/** DELETE /api/training — undoes the split: every photo goes back to the training ground. */
 export async function DELETE() {
   try {
     const { count } = await getPrisma().photo.updateMany({
