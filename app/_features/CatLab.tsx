@@ -11,7 +11,7 @@ import { LabelStep } from "./LabelStep";
 import { TestStep } from "./TestStep";
 import { TrainStep } from "./TrainStep";
 import { UploadStep } from "./UploadStep";
-import { getSavedModel, listPhotos, setLabel, uploadPhoto } from "@/lib/api";
+import { deletePhoto, getSavedModel, listPhotos, setLabel, uploadPhoto } from "@/lib/api";
 import type { Label, Photo, SavedModel } from "@/lib/types";
 
 const MIN_PHOTOS = 2;
@@ -113,6 +113,24 @@ export const CatLab = () => {
     }
   };
 
+  const removePhoto = async (photo: Photo) => {
+    setError(null);
+    const index = photos.findIndex((item) => item.id === photo.id);
+    setPhotos((current) => current.filter((item) => item.id !== photo.id));
+    try {
+      await deletePhoto(photo.id);
+      setModel(null); // the saved model learned from this photo
+    } catch (cause) {
+      // Put the photo back where it was so the student can try again.
+      setPhotos((current) => {
+        const next = [...current];
+        next.splice(Math.max(index, 0), 0, photo);
+        return next;
+      });
+      setError((cause as Error).message);
+    }
+  };
+
   const reason = lockReason();
   const isTesting = step === 4;
 
@@ -133,9 +151,14 @@ export const CatLab = () => {
 
       <StepCard title={TITLES[step - 1]}>
         {step === 1 && (
-          <UploadStep photos={photos} uploadProgress={uploadProgress} onFiles={addPhotos} />
+          <UploadStep
+            photos={photos}
+            uploadProgress={uploadProgress}
+            onFiles={addPhotos}
+            onRemove={removePhoto}
+          />
         )}
-        {step === 2 && <LabelStep photos={photos} onLabel={changeLabel} />}
+        {step === 2 && <LabelStep photos={photos} onLabel={changeLabel} onRemove={removePhoto} />}
         {step === 3 && (
           <TrainStep
             model={model}

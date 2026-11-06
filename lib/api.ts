@@ -27,3 +27,7 @@ export const setLabel = (id: string, label: Label) =>
 export const splitPhotos = () => request<Photo[]>("/api/training", { method: "POST" });
 
 export const getSavedModel = () => request<SavedModel | null>("/api/model");
+
+// The server answers 204 with no body, which request() reads as null.
+export const deletePhoto = (id: string) =>
+  request<null>(`/api/photos/${id}`, { method: "DELETE" });

@@ -9,11 +9,12 @@ import type { Label, Photo } from "@/lib/types";
 interface LabelStepProps {
   photos: Photo[];
   onLabel: (photo: Photo, label: Label) => void;
+  onRemove: (photo: Photo) => void;
 }
 
 const BORDER_FOR = { CAT: "cat", NOT_CAT: "notCat" } as const;
 
-export const LabelStep = ({ photos, onLabel }: LabelStepProps) => (
+export const LabelStep = ({ photos, onLabel, onRemove }: LabelStepProps) => (
   <>
     <CountPills
       cats={photos.filter((photo) => photo.label === "CAT").length}
@@ -27,6 +28,7 @@ export const LabelStep = ({ photos, onLabel }: LabelStepProps) => (
           src={photo.url}
           alt={photo.name}
           border={photo.label ? BORDER_FOR[photo.label] : "none"}
+          onRemove={() => onRemove(photo)}
         >
           <LabelButtons value={photo.label} onChange={(label) => onLabel(photo, label)} />
         </PhotoTile>

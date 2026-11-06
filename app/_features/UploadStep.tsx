@@ -9,9 +9,10 @@ interface UploadStepProps {
   photos: Photo[];
   uploadProgress: { done: number; total: number } | null;
   onFiles: (files: File[]) => void;
+  onRemove: (photo: Photo) => void;
 }
 
-export const UploadStep = ({ photos, uploadProgress, onFiles }: UploadStepProps) => (
+export const UploadStep = ({ photos, uploadProgress, onFiles, onRemove }: UploadStepProps) => (
   <>
     <UploadBox
       title={
@@ -31,7 +32,12 @@ export const UploadStep = ({ photos, uploadProgress, onFiles }: UploadStepProps)
     {photos.length > 0 && (
       <PhotoGrid>
         {photos.map((photo) => (
-          <PhotoTile key={photo.id} src={photo.url} alt={photo.name} />
+          <PhotoTile
+            key={photo.id}
+            src={photo.url}
+            alt={photo.name}
+            onRemove={() => onRemove(photo)}
+          />
         ))}
       </PhotoGrid>
     )}
