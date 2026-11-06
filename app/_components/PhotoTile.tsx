@@ -25,23 +25,27 @@ export const PhotoTile = ({ src, alt, border = "none", onRemove, children }: Pho
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={src} alt={alt} className="aspect-square w-full object-cover" />
     {onRemove && (
-      <button
-        type="button"
-        onClick={onRemove}
-        aria-label={`Delete ${alt}`}
-        title="Delete this photo"
-        className="absolute top-1.5 right-1.5 grid size-8 cursor-pointer place-items-center rounded-full bg-card/90 text-ink shadow hover:bg-red hover:text-white"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
-          <path
-            d="M6 6l12 12M18 6L6 18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      </button>
+      // The corner area is the hover target, so the × shows only when the cursor reaches it.
+      // Touch screens cannot hover, so there the × always shows.
+      <div className="group/remove absolute top-0 right-0 p-1.5">
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label={`Delete ${alt}`}
+          title="Delete this photo"
+          className="grid size-6 cursor-pointer place-items-center rounded-full bg-card/80 text-muted opacity-0 transition-opacity group-hover/remove:opacity-100 hover:bg-red hover:text-white focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="size-3">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </div>
     )}
     {children}
   </div>
